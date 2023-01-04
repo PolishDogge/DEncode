@@ -91,7 +91,13 @@ def DDecode(msg):
                     final.append(' ')
                     skip = True
                     continue
-                
+        ##############
+        # 0 = space
+        # 1 = lowercase
+        # 2 = uppercase
+        # 5 = number
+        # 10 = special character
+        ##############  
 
                 if y == 1:
                     out = False
@@ -101,7 +107,6 @@ def DDecode(msg):
                     final.append(str(x[1]))
                     skip = True
                     continue
-                
                 if y == 10:
                     final.append(chr(x[1]))
                     skip = True
