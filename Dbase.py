@@ -1,5 +1,6 @@
 from random import randint
 import ast
+skip = False
 
 def rng():
     x = randint(0, 1000)
