@@ -1,5 +1,6 @@
 from random import randint
 import ast
+
 skip = False
 
 def rng():
@@ -7,7 +8,10 @@ def rng():
     return x
     
 def convert(mes):
-    x = ast.literal_eval(mes)
+    if type(mes) == list:
+        return mes
+    elif type(mes) == str:
+        x = ast.literal_eval(mes)
     return x    
 
 def DEncode(message, move):
@@ -16,14 +20,6 @@ def DEncode(message, move):
     output = []
     for character in message:
         loop = []
-        
-        ##############
-        # 0 = space
-        # 1 = lowercase
-        # 2 = uppercase
-        # 5 = number
-        # 10 = special character
-        ##############
         if character.isupper():
             loop.append(int(2))
             character = character.lower()
@@ -68,6 +64,7 @@ def DEncode(message, move):
     output.append(move)
     return output
 
+
 def DDecode(msg):
     final = []
     msg = convert(msg)
@@ -92,13 +89,7 @@ def DDecode(msg):
                     final.append(' ')
                     skip = True
                     continue
-        ##############
-        # 0 = space
-        # 1 = lowercase
-        # 2 = uppercase
-        # 5 = number
-        # 10 = special character
-        ##############  
+                
 
                 if y == 1:
                     out = False
@@ -108,6 +99,7 @@ def DDecode(msg):
                     final.append(str(x[1]))
                     skip = True
                     continue
+                
                 if y == 10:
                     final.append(chr(x[1]))
                     skip = True
