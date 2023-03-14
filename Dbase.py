@@ -2,11 +2,6 @@ from random import randint
 import ast
 
 skip = False
-
-def rng():
-    x = randint(0, 1000)
-    return x
-    
 def convert(mes):
     if type(mes) == list:
         return mes
@@ -46,7 +41,7 @@ def DEncode(message, move):
         number = ord(character) - move
 
         #messwith
-        if rng() >= 350:
+        if(int(randint(0, 1000)) >= 350):
             k = randint(0, 1000)
             number = number + k
             loop.append(k)
