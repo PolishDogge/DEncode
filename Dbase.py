@@ -11,11 +11,17 @@ def convert(mes):
         x = ast.literal_eval(mes)
     return x
 
+def convertstr(message):
+    if type(message) == str:
+        return message
+    else:
+        return str(message)
 
-def DEncode(message, move):
+def DEncode(message, move) -> list:
     global skip
     loop = []
     output = []
+    message = convertstr(message)
     for character in message:
         loop = []
         if character.isupper(): # Check if the character is uppercase
@@ -72,8 +78,9 @@ def DEncode(message, move):
             loop.append(ord(character))
             output.append(loop)
             continue
-
+        
         # convert character to number
+        #print(f'Character = {character}')
         number = ord(character) - move
 
         # add random number to loop
@@ -95,8 +102,9 @@ def DEncode(message, move):
     return output
 
 
-def DDecode(msg):
+def DDecode(msg) -> str:
     final = []
+    which = -1
     msg = convert(msg)
     skip = False
     fulllen = len(msg)
@@ -104,39 +112,50 @@ def DDecode(msg):
     msg.pop(fulllen - 1)  # Remove the move number from the message
 
     for x in msg:
+        which = 0
         for y in x:
+            which = which + 1
+            print(which)
             # Loop through each character in the message
             try:
                 if y == x[2]:
                     continue
             except IndexError:
                 pass  # If there is no 3rd character, skip (Dumb way of doing it, but it works)
-
+            
             if y == x[0]:
                 if y == 0:
                     final.append(" ")  # If the first character is 0, add a space
                     skip = True
                     continue
-
+                
                 if y == 1:
                     out = False  # If the first character is 1, set out to false (This is for non-capital letters)
                 if y == 2:
                     out = True  # If the first character is 2, set out to true (This is for capital letters)
                 if y == 5:
-                    final.append(
-                        str(x[1])
-                    )  # If the first character is 5, add the second character to the final message
+                    try:
+                        final.append(
+                            str(x[which])
+                        )  # If the first character is 5, add the second character to the final message
+                    except:
+                        # f this, its so dumb, i updated it because apaprently it outputs a number 5 twice otherwise
+                        pass
                     skip = True
                     continue
-
+                
                 if y == 10:
-                    final.append(
-                        chr(x[1])
-                    )  # If the first character is 10, add the second character to the final message
+                    try:
+                        final.append(
+                            chr(x[which])
+                        )  # If the first character is 10, add the second character to the final message   
+                    except:
+                        # If i did it for the 5s, might as well implement it here
+                        pass
                     skip = True
                     continue
             else:
-
+            
                 try:
                     if x[2]:
                         y = (
@@ -144,11 +163,11 @@ def DDecode(msg):
                         )  # If there is a third character, subtract it from the second character (This is for messing with the message)
                 except IndexError:
                     pass  # Again, the 'best way'
-
+                
                 if skip:
                     skip = False  # If skip is true, set it to false and skip the rest of the loop
                     continue
-
+                
                 if out:
                     final.append(chr(y + move).upper())
                 else:  # If out is false, add the character to the final message
